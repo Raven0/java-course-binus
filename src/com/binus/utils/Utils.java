@@ -15,6 +15,8 @@ public class Utils {
 
     public void print(String args) { System.out.print(args); }
 
+    public void println(String args) { System.out.println(args); }
+
     public void breakLine() { System.out.print("\n"); }
 
     public String scanString() { return scanner.nextLine(); }
