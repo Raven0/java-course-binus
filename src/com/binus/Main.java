@@ -1,39 +1,27 @@
 package com.binus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
     public static void main(String[] args) {
-        List<Integer> primes = new ArrayList<>();
-        int n = 1;
-        while (primes.size() != 5) {
-            if (isPrime(n)){
-                primes.add(n);
-            }
-            n++;
-        }
-
-        print(primes.toString());
+        fib(10);
     }
 
-    static boolean isPrime(int n)
-    {
-        boolean result = true;
+    static void fib(int n) {
+        int num1 = 0;
+        int num2 = 1;
+        int counter = 0;
 
-        // untuk validasi angka 1
-        if (n < 2) {
-            result = false;
-        }
+        if (counter < n) {
+            do {
+                print(String.valueOf(num1));
 
-        for (int i = 2; i <= n / 2; ++i) {
-            if (n % i == 0) {
-                result = false;
-                break;
-            }
+                int num3;
+                num3 = num2 + num1;
+                num1 = num2;
+                num2 = num3;
+                counter = counter + 1;
+            } while (counter < n);
         }
-        return result;
     }
 
     private static void print(String args){
