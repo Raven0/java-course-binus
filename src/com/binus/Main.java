@@ -1,15 +1,14 @@
 package com.binus;
 
 import com.binus.models.Pet;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+import java.util.Vector;
 import java.util.stream.IntStream;
 
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final List<Pet> petList = new ArrayList<>();
+    private static final Vector<Pet> petList = new Vector<>();
 
     public static void main(String[] args) {
         int menu;
@@ -92,7 +91,7 @@ public class Main {
     private static void updatePetMenu() {
         viewPetListMenu();
         if (petList.size() != 0) {
-            int selectedPet = selectPet();
+            int selectedPet = selectPetIndex();
             petList.set(selectedPet - 1, updatePet(petList.get(selectedPet - 1)));
         }
     }
@@ -100,11 +99,11 @@ public class Main {
     private static void treatPetMenu() {
         viewPetListMenu();
         if (petList.size() != 0) {
-            petList.remove(selectPet() - 1);
+            petList.remove(selectPetIndex() - 1);
         }
     }
 
-    private static int selectPet() {
+    private static int selectPetIndex() {
         int selectedIndex;
 
         do {
@@ -130,7 +129,6 @@ public class Main {
         return value;
     }
 
-    @SuppressWarnings("SameParameterValue")
     private static Integer scanInt(String msg) {
         int value;
 
