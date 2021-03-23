@@ -92,27 +92,26 @@ public class Main {
     private static void updatePetMenu() {
         viewPetListMenu();
         if (petList.size() != 0) {
-            int selectedIndex;
-
-            do {
-                selectedIndex= scanInt(String.format("Choose pet number [1 - %d]", petList.size()));
-            } while (selectedIndex < 1  || selectedIndex > petList.size());
-
-            petList.set(selectedIndex-1, updatePet(petList.get(selectedIndex-1)));
+            int selectedPet = selectPet();
+            petList.set(selectedPet - 1, updatePet(petList.get(selectedPet - 1)));
         }
     }
 
     private static void treatPetMenu() {
         viewPetListMenu();
         if (petList.size() != 0) {
-            int selectedIndex;
-
-            do {
-                selectedIndex= scanInt(String.format("Choose pet number [1 - %d]", petList.size()));
-            } while (selectedIndex < 1  || selectedIndex > petList.size());
-
-            petList.remove(selectedIndex - 1);
+            petList.remove(selectPet() - 1);
         }
+    }
+
+    private static int selectPet() {
+        int selectedIndex;
+
+        do {
+            selectedIndex= scanInt(String.format("Choose pet number [1 - %d]", petList.size()));
+        } while (selectedIndex < 1  || selectedIndex > petList.size());
+
+        return selectedIndex;
     }
 
     private static void print(String args) { System.out.println(args); }
