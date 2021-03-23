@@ -1,8 +1,7 @@
 package com.binus.models;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Pet {
     private String name;
@@ -23,12 +22,20 @@ public class Pet {
         return name;
     }
 
+    public boolean getNameConstraint() {
+        return name.length() >= 5 && name.length() <=15;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public String getType() {
         return type;
+    }
+
+    public boolean getTypeConstraint() {
+        return type.equals("kit") || type.equals("puppy") || type.equals("kitten");
     }
 
     public void setType(String type) {
@@ -39,24 +46,31 @@ public class Pet {
         return health;
     }
 
+    public boolean getHealthConstraint() {
+        return health >= 1 && health <=90;
+    }
+
     public void setHealth(Integer health) {
         this.health = health;
     }
 
     @Override
     public String toString() {
-        Map<String, String> typeMap = Stream.of(new String[][] {
-                { "kit", "Rabbit" },
-                { "puppy", "Dog" },
-                { "kitten", "Cat" },
-        }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+        Map<String, String> typeMap = new HashMap<String, String>() {{
+            put("kit", "Rabbit");
+            put("puppy", "Dog");
+            put("kitten", "Cat");
+        }};
 
-        type = typeMap.get(type);
+        Map<String, String> soundMap = new HashMap<String, String>() {{
+            put("kit", "clucking");
+            put("puppy", "bark bark");
+            put("kitten", "meow meow");
+        }};
 
-        return "Pet{" +
-                "name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", health=" + health +
-                '}';
+        return "name='" + name + '\'' +
+                ", type='" + typeMap.get(type) + '\'' +
+                ", sound='" + soundMap.get(type) + '\'' +
+                ", health=" + health;
     }
 }

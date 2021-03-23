@@ -1,14 +1,15 @@
 package com.binus;
 
 import com.binus.models.Pet;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static List<Pet> petList;
+    private static final List<Pet> petList = new ArrayList<>();
 
     public static void main(String[] args) {
         int menu;
@@ -18,7 +19,7 @@ public class Main {
             menu = scanInt("Choice: ");
             switch (menu) {
                 case 1:
-                    addPetMenu();
+                    petList.add(addPet());
                     break;
                 case 2:
                     viewPetListMenu();
@@ -43,72 +44,103 @@ public class Main {
         print("+======================+");
     }
 
-    private static void addPetMenu() {
+    private static Pet addPet() {
         Pet newPet = new Pet();
 
         do {
             newPet.setHealth(scanInt("Input pet Health [1 - 90]"));
-        } while (newPet.getHealth() >= 1 && newPet.getHealth() <= 90);
-
-        print(newPet.getHealth().toString());
+        } while (!newPet.getHealthConstraint());
 
         do {
             newPet.setName(scanString("Input pet Name [5 - 15 characters]"));
-        } while (newPet.getName().length() >= 5 && newPet.getName().length() <= 15);
+        } while (!newPet.getNameConstraint());
 
         do {
             newPet.setType(scanString("Input pet Type [kit | puppy | kitten]"));
-        } while (newPet.getType().equals("kit") || newPet.getType().equals("puppy") || newPet.getType().equals("kitten"));
+        } while (!newPet.getTypeConstraint());
 
-        newPet.setType(scanString("Input pet Type [kit | puppy | kitten]"));
+        return newPet;
+    }
 
-        petList.add(newPet);
+    private static Pet updatePet(Pet pet) {
+        int prevHealth = pet.getHealth();
+
+        do {
+            pet.setHealth(scanInt("Input pet Health [1 - 90]"));
+        } while (!pet.getHealthConstraint());
+
+        if (pet.getHealth() < 20) {
+            pet.setHealth(25);
+        } else if (pet.getHealth() < prevHealth) {
+            pet.setHealth(prevHealth + pet.getHealth() / 2);
+        }
+
+        return pet;
     }
 
     private static void viewPetListMenu() {
         if (petList.size() != 0) {
-            for (Pet pet : petList) {
-                print(pet.toString());
-            }
+            IntStream.range(0, petList.size())
+                    .mapToObj(
+                            i -> String.format("%d. %s", i + 1, petList.get(i).toString())
+                    ).forEach(Main::print);
         } else {
             print("Empty List");
         }
     }
 
     private static void updatePetMenu() {
+        viewPetListMenu();
+        if (petList.size() != 0) {
+            int selectedIndex;
 
+            do {
+                selectedIndex= scanInt(String.format("Choose pet number [1 - %d]", petList.size()));
+            } while (selectedIndex < 1  || selectedIndex > petList.size());
+
+            petList.set(selectedIndex-1, updatePet(petList.get(selectedIndex-1)));
+        }
     }
 
     private static void treatPetMenu() {
+        viewPetListMenu();
+        if (petList.size() != 0) {
+            int selectedIndex;
 
+            do {
+                selectedIndex= scanInt(String.format("Choose pet number [1 - %d]", petList.size()));
+            } while (selectedIndex < 1  || selectedIndex > petList.size());
+
+            petList.remove(selectedIndex - 1);
+        }
     }
 
     private static void print(String args) { System.out.println(args); }
 
-    public static String scanString(String msg) {
+    private static String scanString(String msg) {
         String value;
 
         try {
             print(msg);
             value = scanner.nextLine();
         } catch (Exception x) {
-            print(msg);
-            value = scanner.nextLine();
+            print(x.getMessage());
+            value = null;
         }
 
         return value;
     }
 
     @SuppressWarnings("SameParameterValue")
-    public static Integer scanInt(String msg) {
+    private static Integer scanInt(String msg) {
         int value;
 
         try {
             print(msg);
-            value = scanner.nextInt();
+            value = Integer.parseInt(scanner.nextLine());
         } catch (Exception x) {
-            print(msg);
-            value = scanner.nextInt();
+            print(x.getMessage());
+            value = 0;
         }
 
         return value;
