@@ -4,34 +4,33 @@ import java.util.Scanner;
 
 public class Utils {
 
-    public final String APP_NAME = "init app";
-    private static final Utils utils = new Utils();
     private final Scanner scanner = new Scanner(System.in);
 
-    // empty constructor for singleton
-    private Utils() {}
+    protected static void print(String args) { System.out.println(args); }
 
-    public static Utils getInstance() { return utils; }
-
-    public void print(String args) { System.out.print(args); }
-
-    public void println(String args) { System.out.println(args); }
-
-    public void breakLine() { System.out.print("\n"); }
-
-    public String scanString() { return scanner.nextLine(); }
-
-    public Integer scanInt() { return scanner.nextInt(); }
-
-    public String intToString(Integer args){ return Integer.toString(args); }
-
-    public Integer stringToInt(String args){
-        int value = 0;
+    protected String scanString(String msg) {
+        String value;
 
         try {
-            value = Integer.parseInt(args);
-        } catch (Exception e) {
-            print(String.format("Invalid argument given (%s), setting the value into 0\n", args));
+            print(msg);
+            value = scanner.nextLine();
+        } catch (Exception x) {
+            print(x.getMessage());
+            value = null;
+        }
+
+        return value;
+    }
+
+    protected Integer scanInt(String msg) {
+        int value;
+
+        try {
+            print(msg);
+            value = Integer.parseInt(scanner.nextLine());
+        } catch (Exception x) {
+            print(x.getMessage());
+            value = 0;
         }
 
         return value;
