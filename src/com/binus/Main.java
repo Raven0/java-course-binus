@@ -1,7 +1,5 @@
 package com.binus;
 
-import com.binus.models.Inventory;
-
 public class Main {
 
     private static final PetList petList = new PetList();
